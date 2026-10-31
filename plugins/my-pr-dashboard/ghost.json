@@ -4,8 +4,8 @@
   "name": "我的 PR 看板",
   "description": "汇总我发起、分配给我和请求我评审的 GitHub PR，查看当前提交的 CI 状态，一键交给 Cindy AI 排查。",
   "whenToUse": "查看待处理 GitHub PR、检查 CI 状态、分析 PR 检查失败原因时使用。",
-  "version": "1.0.1",
-  "releaseNotes": "修复 GitHub 创建凭证与 PR 外链跳转，使用 Cindy 支持的同页导航接口。",
+  "version": "1.0.2",
+  "releaseNotes": "修复 GitHub 外链；支持 fine-grained PAT 的 Actions 只读查询，派发失败步骤与 PR 差异给 AI。",
   "minCindyVersion": "0.1.97",
   "entry": "main.js",
   "launch": "on-demand",
@@ -18,7 +18,7 @@
       "key":"github_token",
       "label":"GitHub Personal Access Token",
       "source":"user",
-      "hint":"为目标仓库授权 Pull requests、Checks、Commit statuses 读取权限，然后在插件设置保存。",
+      "hint":"选择目标仓库，并添加 Pull requests、Actions、Commit statuses 三项 Read-only 权限，然后在插件设置保存。",
       "url":"https://github.com/settings/personal-access-tokens/new",
       "inject":{"header":"Authorization","format":"Bearer {value}","hosts":["api.github.com"]}
     }]

@@ -11,8 +11,9 @@ const issues=names.map((title,i)=>({title,number:i+1,repository_url:'https://api
 function github(url){const u=new URL(url),p=u.pathname;
   if(p==='/user')return {login:'example-user'};
   if(p==='/search/issues')return {total_count:3,items:issues};
-  if(p.includes('/pulls/'))return {head:{sha:p.endsWith('/1')?sha:p.endsWith('/2')?'b'.repeat(40):'c'.repeat(40)},state:'open',title:names[Number(p.split('/').at(-1))-1]};
+  if(/\/pulls\/\d+$/.test(p))return {head:{sha:p.endsWith('/1')?sha:p.endsWith('/2')?'b'.repeat(40):'c'.repeat(40)},state:'open',title:names[Number(p.split('/').at(-1))-1]};
   if(p.endsWith('/statuses'))return [];
+  if(p.endsWith('/files'))return [{filename:'src/cache.js',status:'modified',patch:'- sendTwice();\n+ sendOnce();'}];
   if(p.endsWith('/annotations'))return [{path:'src/cache.js',start_line:42,annotation_level:'failure',message:'Expected 1 call, received 2'}];
   if(p.endsWith('/check-runs'))return {check_runs:[{id:11,name:'unit-tests',status:p.includes(sha)?'completed':p.includes('b'.repeat(40))?'in_progress':'completed',conclusion:p.includes(sha)?'failure':'success',output:{summary:'Expected single dispatch, received two.',annotations_count:1}}]};
   throw new Error('Unexpected fixture URL');
@@ -25,7 +26,7 @@ const server=http.createServer(async(req,res)=>{try{
   if(p==='/secrets'){res.end(JSON.stringify([{key:'github_token',saved}]));return;}
   if(p==='/secrets/github_token'){saved=req.method==='PUT';if(saved)secretWrites++;res.writeHead(204).end();return;}
   if(p==='/proxy'){res.end(JSON.stringify({ok:true,status:200,body:JSON.stringify(github(JSON.parse(raw).url))}));return;}
-  if(p==='/task-send'){sendCount++;res.end('{"runId":"run-test"}');return;}
+  if(p==='/task-send'){sendCount++;assert.ok(!JSON.parse(raw).text.includes('PR 文件差异：'));res.end('{"runId":"run-test"}');return;}
   if(p==='/main.html'){res.setHeader('Content-Type','text/html');res.end('<script src="/bridge.js"></script><script src="/main.js"></script>');return;}
   if(p==='/bridge.js'){res.setHeader('Content-Type','text/javascript');res.end(`globalThis.cindy={fetch:async r=>(await fetch('/proxy',{method:'POST',body:JSON.stringify(r)})).json(),tasks:{capabilities:async()=>({operations:['create','send','getRun']}),create:async()=>({taskId:'task-test',revision:0}),send:async r=>(await fetch('/task-send',{method:'POST',body:JSON.stringify(r)})).json(),getRun:async()=>({status:'completed'})}};`);return;}
   if(!/^\/(panel|main|core|settings)\.(html|css|js)$/.test(p)){res.writeHead(404).end();return;}

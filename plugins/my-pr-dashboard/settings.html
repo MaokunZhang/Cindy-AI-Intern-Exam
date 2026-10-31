@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="panel.css"><title>GitHub 连接</title></head><body><main class="settings">
 <label for="token">GitHub Personal Access Token</label><input id="token" type="password" autocomplete="off" placeholder="仅交给 Cindy 凭证保险库" spellcheck="false">
-<p>建议使用 fine-grained PAT，仅授权目标仓库的 Pull requests、Checks、Commit statuses 读取权限。元数据权限由 GitHub 自动附带。<a href="https://github.com/settings/personal-access-tokens/new">前往 GitHub 创建 ↗</a></p>
+<p>fine-grained PAT 请选择目标仓库，并添加 Pull requests、Actions、Commit statuses 三项 Read-only 权限。此类 Token 展示 GitHub Actions 和提交状态；私有仓库的第三方 Checks 需要 GitHub App 授权。<a href="https://github.com/settings/personal-access-tokens/new">前往 GitHub 创建 ↗</a></p>
 <div class="actions"><button id="save">保存 Token</button><button id="clear">清除 Token</button></div><p id="status" role="status" aria-live="polite">正在读取连接状态…</p>
 <p>Token 只在请求 api.github.com 时由 Host 注入。保存后回到看板点击刷新。AI 排查使用插件详情中的任务模型设置。</p>
 </main><script src="settings.js"></script></body></html>

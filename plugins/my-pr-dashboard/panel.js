@@ -35,6 +35,7 @@ function render(){
     top.append(node('span',`${item.repo} #${item.number}`,'repo'),node('span',labels[item.ci]||item.ci,`badge ${item.ci}`));
     card.append(top,node('h2',item.title),node('div',item.relations.map(r=>relationLabels[r]).join(' · ')+(item.draft?' · 草稿':''),'meta'));
     if(item.sha)card.append(node('div',`head ${item.sha.slice(0,7)} · ${item.checks.length+item.statuses.length} 项检查`,'meta'));
+    if(item.coverageNote)card.append(node('div',item.coverageNote,'meta'));
     if(item.errors?.length)card.append(node('div',item.errors.join('；'),'error'));
     const actions=node('div',undefined,'actions'),button=node('button','让 AI 排查 CI','analyze');
     button.disabled=submitting||!!state.busy;

@@ -46,6 +46,25 @@ test('CI uses current head SHA, preserves latest status context, paginates check
   });
   const result=await client.detail({repo:'owner/repo',number:1});assert.equal(result.ci,'success');assert.equal(result.checks.length,100);assert.equal(result.statuses.length,1);assert.equal(calls.length,4);
 });
+test('fine-grained PAT falls back to Actions with SHA, latest run and failed step evidence',async()=>{
+  const client=createClient(async({url})=>{
+    const p=new URL(url).pathname;
+    if(p.endsWith('/pulls/1'))return response({head:{sha},state:'open'});
+    if(p.endsWith('/check-runs'))return {ok:true,status:403};
+    if(p.endsWith('/statuses'))return response([]);
+    if(p.endsWith('/actions/runs')){assert.equal(new URL(url).searchParams.get('head_sha'),sha);return response({workflow_runs:[{id:12,workflow_id:1,event:'push',name:'CI',status:'completed',conclusion:'failure'},{id:11,workflow_id:1,event:'push',status:'completed',conclusion:'success'}]});}
+    if(p.endsWith('/runs/12/jobs'))return response({jobs:[{name:'tests',conclusion:'failure',steps:[{name:'intentional fixture',conclusion:'failure',number:1}]}]});
+    if(p.endsWith('/files'))return response([{filename:'.github/workflows/fixture.yml',patch:'+ exit 1'}]);
+    throw new Error('Unexpected fixture endpoint');
+  });
+  const result=await client.detail({repo:'owner/repo',number:1},true);
+  assert.equal(result.ci,'failure');assert.equal(result.checks.length,1);assert.equal(result.checks[0].runId,12);
+  assert.equal(result.checks[0].failedJobs[0].failedSteps[0].name,'intentional fixture');assert.equal(result.changedFiles[0].patch,'+ exit 1');assert.match(result.coverageNote,/第三方 Checks 未计入/);
+});
+test('Actions fallback permission errors remain unknown instead of green',async()=>{
+  const client=createClient(async({url})=>url.endsWith('/pulls/1')?response({head:{sha},state:'open'}):url.includes('/statuses')?response([{context:'build',state:'success'}]):{ok:true,status:403});
+  const result=await client.detail({repo:'owner/repo',number:1});assert.equal(result.ci,'unknown');assert.match(result.errors[0],/Actions/);
+});
 function harness({sendFailure=false,writeFailure=false}={}){
   let stored={},sends=0,creates=0,head=sha,fail=sendFailure,writeFail=writeFailure;const createKeys=[],sendKeys=[];
   const item={key:'owner/repo#1',repo:'owner/repo',number:1,title:'Example',url:'https://github.com/owner/repo/pull/1',relations:['author'],checks:[check('failure')],statuses:[],errors:[],ci:'failure',state:'open'};
