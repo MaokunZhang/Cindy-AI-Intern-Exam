@@ -18,3 +18,15 @@ logs/
 *.sqlite3
 .DS_Store
 Thumbs.db
+
+# Reproducible local test output and editor temporary files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+browser-results/
+test-results/
+playwright-report/
+*.tmp
+*.bak
+~$*.docx
