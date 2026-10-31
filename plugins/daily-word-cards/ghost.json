@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 3,
+  "id": "daily-word-cards",
+  "name": "每日单词卡",
+  "description": "每天学习 10 个英语单词，通过 Cindy 生成贴近工作场景的例句与中文翻译，并保留当天学习记录。",
+  "whenToUse": "学习工作英语、查看每日十词或生成工作场景例句时使用。",
+  "version": "1.0.0",
+  "minCindyVersion": "0.1.64",
+  "entry": "main.js",
+  "launch": "on-demand",
+  "cindy": { "text": ["oneshot"] },
+  "panel": { "title": "每日单词卡", "html": "panel.html", "position": "tab" }
+}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日单词卡</title><link rel="stylesheet" href="panel.css"></head>
+<body>
+<main>
+  <header><p class="eyebrow">DAILY WORDS · 工作英语</p><h1>每天十个词，<br>用进工作里。</h1><p id="date" class="muted"></p></header>
+  <section class="setup" aria-label="学习设置">
+    <label for="context">你的工作场景</label>
+    <textarea id="context" maxlength="500" rows="2" placeholder="例如：AI 工程实习生，调试插件并参加英文站会"></textarea>
+    <div class="actions"><button id="generate" type="button">生成今日例句</button><button id="regenerate" type="button" class="secondary" hidden>重新生成</button><span class="hint">通过 Cindy 生成 · 当天缓存复用</span></div>
+    <p class="hint">场景会发送给 Cindy 当前选用的模型，请填写适合用于生成例句的信息。</p>
+  </section>
+  <p id="status" role="status" aria-live="polite">正在读取学习记录…</p>
+  <p id="error" role="alert" hidden></p>
+  <section id="cards" class="grid" aria-label="今日十词"></section>
+  <details id="previous" hidden><summary>查看上次成功的卡片</summary><p id="previous-label" class="hint"></p><section id="previous-cards" class="grid"></section></details>
+  <footer>70 词基础循环 · 每日按电脑本地日期更新<br>AI 例句仅供学习；重要表达请结合语境核对。</footer>
+</main>
+<script src="core.js"></script><script src="panel.js"></script>
+</body></html>
