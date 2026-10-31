@@ -1,0 +1,14 @@
+# Explicit acceptance fixture: a real failed GitHub Actions check for B1.
+# This workflow lives only on the demonstration PR branch; it is not a product defect.
+name: PR dashboard acceptance fixture
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  expected-failure-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Emit a reproducible diagnostic for the PR dashboard
+        run: |
+          echo '::error file=fixtures/pr-dashboard-ci.txt,line=1,title=Intentional B1 acceptance fixture::Expected one task dispatch but received two. This is a deliberate test fixture, not a failing product test. The production duplicate-click unit test passes.'
+          exit 1
