@@ -43,6 +43,6 @@ git ls-remote --heads origin main
 git status --short
 ```
 
-最后两条 SHA 应一致，表示本地最终提交已到达远端。未纳入此次提交的后续题目占位文件仍可能显示为 untracked，不影响已推送的 Part 0。
+`git rev-parse HEAD` 与 `git ls-remote --heads origin main` 返回的 SHA 应一致；`git status --short` 用于检查尚未提交的文件。
 
-当前完成的是 Part 0；Part A、Part B 和个人 AI 使用说明仍待完成。提交整份笔试时，应继续使用同一个仓库，并附上最终答题文档。
+以上提交表保留 Part 0 的实际完成顺序。后续 Part A、Part B 和个人 AI 使用说明也已完成，继续使用同一仓库提交。完整答题入口见[仓库首页](../README.md)，最后检查见[完整性检查记录](../notes/final-review.md)。

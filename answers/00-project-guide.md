@@ -30,4 +30,4 @@ Cindy 是一个把 AI Agent 接入真实工作的开源客户端：用户在统�
 
 ## 阅读过程与 AI 使用
 
-我委托 Codex 先读原题、AGENTS.md、README 与仓库地图，再查各模块 package.json；随后按插件手册定位存储、联网、模型和任务接口，并交叉核对 preload、宿主实现和已有测试。Codex 完成检索与初稿整理；11 个快问快答定向测试通过。尚未验证 GUI、账号或真实模型调用。
+我委托 Codex 先读原题、AGENTS.md、README 与仓库地图，再查各模块 package.json；随后按插件手册定位存储、联网、模型和任务接口，并交叉核对 preload、宿主实现和已有测试。Codex 完成检索与初稿整理；11 个快问快答定向测试通过。初始阅读后，已完成插件导入、真实模型生成与缓存验证，详见[运行记录](../notes/daily-word-cards-verification.md)。
