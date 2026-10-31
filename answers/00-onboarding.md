@@ -86,4 +86,4 @@ Cindy 是一个把 AI Agent 接入真实工作的开源客户端：用户在统�
 1. `b2fcf0d109f8a629c1d2da171d48bb5b5723f9bf` — `docs(part0): map Cindy architecture and verify plugin capability evidence`。记录项目导览、实际阅读过程、源码依据和定向测试结果。
 2. `d8cec8143a9e403fd970210e2f0300387752e7f6` — `docs(part0): answer vocabulary model design and deliver one-page guide`。补充单词卡三问、失败与配置边界、经渲染确认的一页 Word 导览，以及完整答题稿。后续插件实现与运行证据另行提交，完整记录以 `git log --oneline` 为准。
 
-当前尚未绑定或推送个人 GitHub 远端；本地提交不等于已完成题目要求的 GitHub 提交。后续需要将此 submission 仓库推到本人指定的 GitHub 仓库，并提交仓库或 PR 链接。
+2026-10-31 已推送到个人私有仓库 [https://github.com/MaokunZhang/Cindy-AI-Intern-Exam](https://github.com/MaokunZhang/Cindy-AI-Intern-Exam)，分支为 `main`。原有阅读、设计、实现和验证提交完整保留，详细说明见 [C 部分：提交记录](00c-submission.md)。评阅者需拥有仓库访问权限。

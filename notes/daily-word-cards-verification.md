@@ -77,4 +77,4 @@ node scripts/browser-smoke.cjs plugins/daily-word-cards .cache/browser-qa <含pl
 
 Codex 完成仓库检索、设计稿、插件代码、测试、打包和文档整理；Cindy 宿主实际执行了插件和例句生成。没有把这些代码称为由 Cindy 聊天 Agent 编写。用户负责登录和亲自确认插件安装能力。
 
-本地提交保留源码与说明。GitHub 远端尚未配置；因此“本地代码和提交已完成”不等于题目要求的 GitHub 链接已经交付。
+本地提交保留源码与说明。后续于 2026-10-31 完成 Part 0 C：已推送到 [GitHub 私有仓库](https://github.com/MaokunZhang/Cindy-AI-Intern-Exam)，分支 `main`。提交历史与交付入口见 [C 部分](../answers/00c-submission.md)。
