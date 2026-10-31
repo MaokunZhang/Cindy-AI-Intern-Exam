@@ -4,7 +4,7 @@ Cindy 常驻侧面板：汇总我发起、分配给我、请求我评审的未�
 
 ## 安装与使用
 
-1. 在 Cindy 插件页导入 `my-pr-dashboard-1.0.2.cindy`，确认面板、自主网络和普通任务能力。
+1. 在 Cindy 插件页导入 `my-pr-dashboard-1.0.3.cindy`，确认面板、自主网络和普通任务能力。
 2. 打开插件详情 → 自定义设置，保存自己的 GitHub PAT。fine-grained PAT 仅选需要的仓库，添加 Pull requests、Actions、Commit statuses 三项 Read-only 权限，点击 GitHub 的 Update 保存。只选择仓库而不添加权限，仍然读不到私有 PR。
 3. 打开任意任务，点右上角“显示侧栏”，选择“我的 PR 看板”页签，然后点击“刷新”。三类查询按仓库和 PR 编号去重；可切换关系筛选。
 4. 点击“让 AI 排查 CI”。在左侧任务列表打开 `CI 排查 · owner/repo#number`，查看回复、继续追问。同一 head SHA 再次点击会返回已创建任务；新提交可新建任务。

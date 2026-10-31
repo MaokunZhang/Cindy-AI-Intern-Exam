@@ -59,6 +59,7 @@ test('fine-grained PAT falls back to Actions with SHA, latest run and failed ste
   });
   const result=await client.detail({repo:'owner/repo',number:1},true);
   assert.equal(result.ci,'failure');assert.equal(result.checks.length,1);assert.equal(result.checks[0].runId,12);
+  assert.equal(Object.hasOwn(result.checks[0],'annotationCount'),false);assert.match(result.checks[0].annotationsNote,/未读取/);
   assert.equal(result.checks[0].failedJobs[0].failedSteps[0].name,'intentional fixture');assert.equal(result.changedFiles[0].patch,'+ exit 1');assert.match(result.coverageNote,/第三方 Checks 未计入/);
 });
 test('Actions fallback permission errors remain unknown instead of green',async()=>{

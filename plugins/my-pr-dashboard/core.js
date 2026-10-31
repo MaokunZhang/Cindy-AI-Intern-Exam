@@ -91,7 +91,7 @@
             const runs=await pages(`${prefix}/actions/runs?head_sha=${sha}`,'workflow_runs',10);
             const latestRuns=new Map();
             for(const run of runs){const key=`${run.workflow_id}:${run.event}`;const old=latestRuns.get(key);if(!old||Number(run.id)>Number(old.id))latestRuns.set(key,run);}
-            checks=[...latestRuns.values()].map(run=>({name:cut(run.name,160),source:'actions',runId:run.id,status:run.status,conclusion:run.conclusion,url:cut(run.html_url,800),summary:`GitHub Actions run ${run.run_number}, attempt ${run.run_attempt}`,annotationCount:0}));
+            checks=[...latestRuns.values()].map(run=>({name:cut(run.name,160),source:'actions',runId:run.id,status:run.status,conclusion:run.conclusion,url:cut(run.html_url,800),summary:`GitHub Actions run ${run.run_number}, attempt ${run.run_attempt}`,annotationsNote:'Actions API 不提供 Check annotations 数量；本次未读取，不能当作 0 条。'}));
             ciSource='GitHub Actions + Commit statuses';
             coverageNote='当前 Token 读取 Actions 与提交状态；第三方 Checks 未计入。';
           }catch(error){errors.push(`Checks：${errorText(results[0].reason)}；Actions：${errorText(error)}`);}
