@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="panel.css"><title>我的 PR 看板</title></head><body>
+<main>
+  <div class="toolbar"><div><span class="eyebrow">GITHUB / PULL REQUESTS</span><p id="account">连接 GitHub 后查看待处理 PR</p></div><button id="refresh" class="refresh">↻ 刷新</button></div>
+  <div class="stats" aria-label="CI 概览"><div><b id="total">—</b><span>待处理</span></div><div><b id="failed">—</b><span>CI 挂了</span></div><div><b id="running">—</b><span>CI 在跑</span></div><div><b id="passed">—</b><span>CI 过了</span></div></div>
+  <nav aria-label="PR 范围"><button data-filter="all" aria-pressed="true">全部</button><button data-filter="author" aria-pressed="false">我发起的</button><button data-filter="assignee" aria-pressed="false">分配给我</button><button data-filter="review" aria-pressed="false">请我评审</button></nav>
+  <div id="notice" role="status" aria-live="polite"></div><div id="warning" role="alert"></div>
+  <section id="list" aria-label="PR 列表"></section>
+  <section id="tasks" aria-label="已提交的排查任务"></section>
+  <footer><span id="updated">尚未刷新</span><p>汇总三类未关闭 PR · 以当前 Token 可见范围为准</p><p>首次使用：在插件详情的自定义设置中保存 GitHub Token。</p></footer>
+</main><script src="panel.js"></script></body></html>
