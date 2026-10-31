@@ -1,0 +1,19 @@
+[2026-10-31T14:30:18.967+11:00] [INFO ] [brain] ghost installed { id: 'daily-word-cards', version: '1.0.0' }
+[2026-10-31T14:30:19.085+11:00] [INFO ] [r:GhostWebview] webview created {"instanceId":"_root__daily-word-cards"}
+[2026-10-31T14:30:19.306+11:00] [INFO ] [brain] ghost runtime state { id: '_root__daily-word-cards', state: 'starting' }
+[2026-10-31T14:30:19.307+11:00] [INFO ] [brain-runtime] spawn ghost sandbox { id: 'daily-word-cards' }
+[2026-10-31T14:30:19.633+11:00] [INFO ] [brain] ghost runtime state { id: '_root__daily-word-cards', state: 'running' }
+[2026-10-31T14:30:38.884+11:00] [INFO ] [brain] ghost cindy-request oneshot_text start { ghostId: '_root__daily-word-cards', callId: 'unattributed' }
+[2026-10-31T14:30:44.042+11:00] [INFO ] [utility-model:one-shot] utility text request accepted { wire: 'chat-completions', step: 'chat-completions|off', requests: 1 }
+[2026-10-31T14:30:44.043+11:00] [INFO ] [utility-model:one-shot] explicit utility text provider succeeded {
+   providerId: 'xd',
+   model: 'deepseek/deepseek-v4-flash',
+   transport: 'litellm-chat-completions'
+ }
+[2026-10-31T14:30:44.043+11:00] [INFO ] [brain] ghost cindy-request oneshot_text done {
+   ghostId: '_root__daily-word-cards',
+   callId: 'unattributed',
+   chars: 1430
+ }
+[2026-10-31T14:32:33.111+11:00] [INFO ] [r:GhostWebview] webview destroyed {"instanceId":"_root__daily-word-cards","aliveMs":134056,"reason":"unmount"}
+[2026-10-31T14:32:47.586+11:00] [INFO ] [r:GhostWebview] webview created {"instanceId":"_root__daily-word-cards"}
