@@ -39,7 +39,7 @@ function render(){
     const actions=node('div',undefined,'actions'),button=node('button','让 AI 排查 CI','analyze');
     button.disabled=submitting||!!state.busy;
     button.addEventListener('click',()=>analyze(item.key));
-    const link=node('a','GitHub ↗');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';
+    const link=node('a','GitHub ↗');link.href=item.url;
     actions.append(button,link);card.append(actions);el('list').append(card);
   }
   el('tasks').replaceChildren();
