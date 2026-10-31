@@ -16,7 +16,7 @@
 
 ### 3. Token 由用户提供，交给 Cindy 保管
 
-最小版本使用用户为目标仓库授权的 GitHub PAT。优先使用限制到所需仓库的 fine-grained PAT，配置 Pull requests、Checks、Commit statuses 的读取权限；额外读取 Actions 信息时再加 Actions 读取权限。看板展示 Token 可见范围内的 PR。
+最小版本使用用户为目标仓库授权的 GitHub PAT。使用限制到所需仓库的 fine-grained PAT，配置 Pull requests、Actions、Commit statuses 三项 Read-only 权限。Checks API 不支持这类 PAT，当前实现遇到 Checks 403/404 时改用同一 SHA 的 Actions 工作流与提交状态，并在界面说明第三方 Checks 未计入。完整 Checks 路径适用于 GitHub App token 或已有合适权限的 classic PAT。看板展示 Token 可见范围内的 PR。
 
 清单声明 `network.secrets`，由设置页通过 `PUT /secrets/github_token` 一次性交给宿主凭证保险库。Host 加密保存，只向 `api.github.com` 注入 `Authorization: Bearer {value}`。页面只读取“是否保存”状态，逻辑页、普通 KV、源码、日志和 AI 消息均不保存 Token。设置页提供替换和清除入口。
 
@@ -32,7 +32,7 @@ PR 标题、描述和 CI 输出作为外部资料处理，不能变成新的执�
 
 ## 实现计划与验收
 
-先完成三类 PR 分页查询、去重、关系筛选和手动刷新。CI 按当前 head SHA 合并 Checks 与 Commit statuses；失败优先于运行中，通过需要已完成且没有失败。无检查、查询失败、取消或跳过分别展示，避免把“没有数据”画成通过。搜索达到 GitHub 上限、接口缺权或限流时给出明确提示。
+先完成三类 PR 分页查询、去重、关系筛选和手动刷新。CI 按当前 head SHA 合并 Checks 与 Commit statuses；fine-grained PAT 使用 Actions 降级路径；失败优先于运行中，通过需要已完成且没有失败。无检查、查询失败与跳过分别展示；取消归入异常状态，避免把“没有数据”画成通过。搜索达到 GitHub 上限、接口缺权或限流时给出明确提示。
 
 随后验证浅色/深色与窄面板布局、Token 缺失/401/403/429、查询分页、CI 聚合和重复点击。最后在 Cindy 导入安装包，连接真实 GitHub 数据，点击 PR 创建任务，记录运行截图和实际结果。
 
@@ -47,6 +47,28 @@ PR 标题、描述和 CI 输出作为外部资料处理，不能变成新的执�
 - [GitHub Check runs](https://docs.github.com/en/rest/checks/runs)
 - [GitHub Commit statuses](https://docs.github.com/en/rest/commits/statuses)
 
-## 实现与运行记录
+## 实现与实机结果
 
-本节在实现和实机验证后补充；以上四项设计先于插件代码保存。
+四项设计在 `5b8b587` 先提交；首版代码随后在 `e8e288c` 提交。最终插件为 **1.0.3**，源码、安装包、测试和截图均保存在本仓库。
+
+- 三类 PR 分页、去重、筛选、手动刷新与更新时间已完成；CI 始终对应 PR 当前 head SHA。
+- Cindy 已连接 `@MaokunZhang`，实际显示 1 个待处理 PR、1 个失败 PR；验收 PR #1 的 head 为 `e9471c60f5b48171ed6b48492d5ca4a71391d780`，两个 Actions run 均失败。
+- 点击“让 AI 排查 CI”创建了 `CI 排查 · MaokunZhang/Cindy-AI-Intern-Exam#1` 普通任务。**Pi · DeepSeek V4 Flash** 已返回分析，任务 API 显示 `completed`。AI 根据工作流差异识别出 `exit 1` 是验收夹具的预期失败，并给出证据与验证步骤。
+- 再次点击同一 PR 和 SHA，面板显示“已有同一提交的排查任务”，复用原回执。
+- 14 项核心测试、9 项浏览器契约检查通过。模拟浏览器截图与 Cindy 实机截图分目录保存。
+
+[草稿 PR #1](https://github.com/MaokunZhang/Cindy-AI-Intern-Exam/pull/1) 是专门创建的真实失败 CI 夹具，仅验收分支包含故意失败的工作流；main 的插件正式测试通过。保留草稿供复测，不合并。
+
+## 调试中发现的问题与修正
+
+1. **设置页跳转无反应。** 初版外链用了 `target="_blank"`；Cindy 要由 Host 拦截同页导航并转交系统浏览器。已移除设置页和 PR 链接的 `_blank`，加入外链契约检查。1.0.3 实机点击“前往 GitHub 创建”后，Chrome 成功打开 `https://github.com/settings/personal-access-tokens/new`。
+2. **能识别账号但查不到私有 PR。** 用户 PAT 已选仓库，却没有添加仓库读取权限。用户补齐 Pull requests、Actions、Commit statuses 后，真实列表正常显示。
+3. **最初推荐了 fine-grained PAT 不支持的 Checks 权限。** 对照 GitHub 接口文档后改为 Actions 降级读取，显示覆盖范围；无需扩大到完整仓库写权限。失败任务附带 job/step 和 PR 文件差异供 AI 分析。
+4. **实机回复暴露证据字段错误。** 1.0.2 的 Actions 路径把未读取的注释数量写为 `0`，AI 因此建议排查注释为何为空。1.0.3 删除该数量字段，改为明确标记“未读取”，并增加回归断言。实机 AI 截图保留首次运行原貌，未改写其回复。
+5. **旧伙伴对话 provider 不匹配。** 原对话绑定 `cindy_openai`，当前 provider 为 `cindy_gateway`，导致该旧对话无法继续。插件新建任务采用 Pi / DeepSeek，并已完成真实回复，这个旧对话错误不影响已验证的看板链路。
+
+## 最小版本的边界
+
+只查询 Token 可见仓库。每类搜索最多 1000 项，部分失败显示提示；Actions 降级路径不包含第三方 Checks。失败详情最多附 5 个检查、每个 20 条注释，或 Actions 失败 job/step；另附前 20 个文件各 2400 字符的 patch，不下载完整日志。最近 12 条任务回执用于同一提交去重。只发起诊断，不自动修改代码、评论、重跑或合并。
+
+入口：[插件使用说明](../plugins/my-pr-dashboard/README.md) · [完整验证记录](../notes/b1-verification.md) · [实机截图](../screenshots/b1-live/)
